@@ -1,0 +1,17 @@
+{
+  "name": "BITSScheduleExtractor",
+  "version": "1.0.0",
+  "description": "Extract Calendar for specific course from BITS weekly course schedule",
+  "author": "Rajkumar <prajkumar.cse@gmail.com>",
+  "main": "index.js",
+  "repository": {
+  "type": "git",
+  "url": "https://github.com/nodejitsu/browsenpm.org"
+},
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "axios": "^0.16.2",
+    "replaceall": "^0.1.6"
+  },
+  "license": "MIT"
+}
