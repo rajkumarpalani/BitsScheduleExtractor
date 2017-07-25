@@ -8,14 +8,22 @@ function sanitize(data) {
     return replaceall("\t", "", replaceall("\n", "", data));
 }
 
+function isTime(data) {
+    const regex = /[-\.]+/g;
+    let m;
+
+    return regex.test(data);
+}
+
 axios.get(env.url).then(response => {
     let $ = cheerio.load(response.data);
     let schedules = [];
     let meta = {};
     let rowNum = 0, cellNum = 0, day = "";
+    let metaErase = false;
     $('table').each((i, elm) => {
         rowNum = 0;
-        meta = {};
+        metaErase = true;
         //console.log(elm, $(elm));
         $(elm).children().each((i, body) => {
             $(body).children().each((j, row) => {
@@ -27,14 +35,21 @@ axios.get(env.url).then(response => {
                     }
                     if (rowNum == 0) {
                         if (cellNum > 0) {
-                            meta[cellNum] = sanitize($(cell).text());
+                            let time = sanitize($(cell).text());
+                            if(isTime(time)){
+                                if(metaErase){
+                                    meta = {};
+                                    metaErase = false;
+                                }
+                                meta[cellNum] = time;
+                            }
                         }
                     } else {
                         let data = sanitize($(cell).text());
                         if (data.startsWith(env.course)) {
                             schedules.push({
                                 day: day,
-                                time: meta[cellNum],
+                                time: meta[cellNum + 1],
                                 course: data
                             })
                         }
